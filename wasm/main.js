@@ -3,6 +3,8 @@ let renderHit=null;
 let outPtr=0;
 let outCapacity=0;
 
+window.Module=window.Module||{};
+
 function ensureAudio(){
   if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)();
   if(ctx.state==='suspended') ctx.resume();
@@ -17,11 +19,13 @@ function ensureBuffer(frames){
 
 function playVoice(index,pad){
   ensureAudio();
+  if(!renderHit || !Module.HEAPF32) return;
   const sr=ctx.sampleRate;
   const frames=Math.ceil(sr*0.8);
   ensureBuffer(frames);
   const written=renderHit(index,outPtr,frames,sr);
-  const mono=new Float32Array(Module.HEAPF32.buffer,outPtr,written).slice();
+  const start=outPtr>>2;
+  const mono=Module.HEAPF32.slice(start,start+written);
   const b=ctx.createBuffer(1,written,sr);
   b.copyToChannel(mono,0);
   const s=ctx.createBufferSource();
