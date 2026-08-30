@@ -7,7 +7,7 @@ crispydrums.js: CrispyDrumsWasm.cpp
 		-s WASM=1 \
 		-s ALLOW_MEMORY_GROWTH=1 \
 		-s EXPORTED_FUNCTIONS='["_crispy_render_hit","_malloc","_free"]' \
-		-s EXPORTED_RUNTIME_METHODS='["cwrap"]' \
+		-s EXPORTED_RUNTIME_METHODS='["cwrap","HEAPF32"]' \
 		-s ENVIRONMENT=web \
 		-o crispydrums.js
 
